@@ -9,14 +9,12 @@ done
 width="${#board[0]}"
 height="${#board[@]}"
 
-pattern="XMAS"
-
 # check_at x y dx dy
 check_at() {
     local x=$1 y=$2 dx=$3 dy=$4
 
-    for i in {0..3}; do
-        if [[ ${board[y]:x:1} != ${pattern:i:1} ]]; then
+    for c in X M A S; do
+        if [[ ${board[y]:x:1} != $c ]]; then
             return 1
         fi
 
