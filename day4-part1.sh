@@ -11,14 +11,17 @@ pattern="XMAS"
 
 # check_at x y dx dy
 check_at() {
-    local x=$1 y=$2 dx=$3 dy=$4 xx yy
+    local x=$1 y=$2 dx=$3 dy=$4
 
     for i in {0..3}; do
-        (( xx = x + i*dx, yy = y + i*dy ))
-        if [[ ${board[yy]:xx:1} != ${pattern:i:1} ]]; then
+        if [[ ${board[y]:x:1} != ${pattern:i:1} ]]; then
             return 1
         fi
+
+        (( x += dx, y += dy ))
     done
+
+    return 0
 }
 
 count=0
