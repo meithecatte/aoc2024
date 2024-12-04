@@ -1,4 +1,6 @@
 #!/bin/bash
+LC_ALL=C
+
 declare -a board=()
 while read -r line; do
     board+=("$line")
