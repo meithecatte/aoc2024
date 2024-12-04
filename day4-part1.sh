@@ -11,11 +11,7 @@ pattern="XMAS"
 
 # check_at x y dx dy
 check_at() {
-    local x=$1 y=$2 dx=$3 dy=$4
-    local xx=$((x + 3*dx)) yy=$((y + 3*dy))
-    if (( xx < 0 || xx >= width || yy < 0 || yy >= height )); then
-        return 1
-    fi
+    local x=$1 y=$2 dx=$3 dy=$4 xx yy
 
     for i in {0..3}; do
         (( xx = x + i*dx, yy = y + i*dy ))
@@ -27,10 +23,15 @@ check_at() {
 
 count=0
 
-for (( y=0; y < height; y++ )); do
-    for (( x=0; x < width; x++)); do
-        for d in "1 0" "0 1" "-1 0" "0 -1" "-1 -1" "-1 1" "1 -1" "1 1"; do
-            if check_at $x $y $d; then
+for d in "1 0" "0 1" "-1 0" "0 -1" "-1 -1" "-1 1" "1 -1" "1 1"; do
+    set -- $d; dx=$1 dy=$2
+    (( minx = dx < 0 ? 3 : 0 ))
+    (( maxx = dx > 0 ? width-3 : width ))
+    (( miny = dy < 0 ? 3 : 0 ))
+    (( maxy = dy > 0 ? height-3 : height ))
+    for (( y=miny; y < maxy; y++ )); do
+        for (( x=minx; x < maxx; x++ )); do
+            if check_at $x $y $dx $dy; then
                 (( count++ ))
             fi
         done
