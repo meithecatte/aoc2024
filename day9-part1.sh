@@ -12,40 +12,36 @@ segment() {
 
 for (( i=0; i < len; i+=2 )); do
     if (( i % 1000 == 0 )); then
-        echo $i
+        echo ${#disk[@]}
     fi
-    filesize=${input:i:1}
-    segment $((i/2)) $filesize
-    gapsize=${input:i+1:1}
-    segment -1 $gapsize
+    segment $((i/2)) ${input:i:1}
+    segment -1 ${input:i+1:1}
 done
 
 trim() {
-    while (( disk[len - 1] == -1 )); do
-        (( len-- ))
+    while (( disk[${#disk[@]} - 1] == -1 )); do
+        unset disk[${#disk[@]}-1]
     done
 }
 
 trim # probably no-op
 
-len=${#disk[@]}
-echo len = $len
-
-for (( i=0; i < len; i++ )); do
+for (( i=0; i < ${#disk[@]}; i++ )); do
     if (( i % 1000 == 0 )); then
         echo $i
     fi
     # invariant: disk is trimmed
     if (( disk[i] == -1 )); then
         # i cannot be the last index because of invariant
-        (( disk[i] = disk[len-- - 1] ))
+        (( disk[i] = disk[${#disk[@]} - 1] ))
+        unset disk[${#disk[@]}-1]
         trim
     fi
 done
 
 checksum=0
 
-for (( i=0; i < len; i++ )); do
+for (( i=0; i < ${#disk[@]}; i++ )); do
     (( checksum += disk[i] * i ))
 done
 
