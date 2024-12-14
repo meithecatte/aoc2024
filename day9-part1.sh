@@ -1,4 +1,5 @@
 #!/bin/bash
+LC_ALL=C
 read input
 len=${#input}
 declare -A disk=()
@@ -11,9 +12,6 @@ segment() {
 }
 
 for (( i=0; i < len; i+=2 )); do
-    if (( i % 1000 == 0 )); then
-        echo ${#disk[@]}
-    fi
     segment $((i/2)) ${input:i:1}
     segment -1 ${input:i+1:1}
 done
@@ -27,9 +25,6 @@ trim() {
 trim # probably no-op
 
 for (( i=0; i < ${#disk[@]}; i++ )); do
-    if (( i % 1000 == 0 )); then
-        echo $i
-    fi
     # invariant: disk is trimmed
     if (( disk[$i] == -1 )); then
         # i cannot be the last index because of invariant
