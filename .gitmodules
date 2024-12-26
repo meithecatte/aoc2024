@@ -1,0 +1,3 @@
+[submodule "bdsm"]
+	path = bdsm
+	url = https://github.com/meithecatte/bdsm.git
